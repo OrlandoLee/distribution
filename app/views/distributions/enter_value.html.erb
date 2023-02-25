@@ -33,6 +33,7 @@
     display: block;
   }
 </style>
+<h1>This is a PUBLIC page EVERYONE can see it. The DATA is not stored but it's public. So NEVER use REAL NAME</h1>
 
 <div style="display: flex; flex-direction: column; align-items: center;">
   <h3>If you need to add more than <%= @all_patients.count%> patients, edit and update here</h3>
@@ -71,8 +72,8 @@
           <%= f_teams.fields_for 'patients[]', patient do |f_patient| %>
             <strong><%= "Patient #{patient.id}" %></strong>
             <div>
-              <%= f_patient.label :name %>
-              <%= f_patient.text_field :name, placeholder: 'Enter identifier (required)' %>
+              <%= f_patient.label :name_do_not_use_real_name %>
+              <%= f_patient.text_field :name, placeholder: 'Enter fake name (required)' %>
             </div>
             <div>
               <%= f_patient.label :patient_type %>
