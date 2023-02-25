@@ -26,6 +26,13 @@ class Team
     end
   end
 
+  def add_patient_ignore_cap(patient)
+    @patients << patient
+    patient.team = self
+    @census += 1
+    return true
+  end
+
   def is_resident_team?
     RESIDENT_TEAM_TYPE.include?(team_type)
   end

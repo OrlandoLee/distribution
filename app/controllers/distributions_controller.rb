@@ -198,7 +198,7 @@ class DistributionsController < ApplicationController
     if(short_call_team.present?)
       short_call_team_received = 0
       # Assign up to 2 patients based on priority
-      ['Type P', 'Type ASR', 'Type ANR', 'Type ASA', 'Type ANA'].each do |patient_type|
+      ['Type P', 'Type ASR', 'Type ANR', 'Type ASA', 'Type ANA', 'Type ACR'].each do |patient_type|
         selected_patients = patients.select do |p|
           p.patient_type == patient_type && !p.team.present?
         end
@@ -477,6 +477,11 @@ class DistributionsController < ApplicationController
       end
     end
     
+    # extra step
+    pass_step_22 = patients.select do |p|
+      ['Type CSA','Type CNA','Type ASA','Type ANA','Type ASR','Type ANR','Type P','Type ACR'].include?(p.patient_type) && !p.team.present?
+    end.present?
+
     # Step 22
     cards_a_team = all_teams.select{|team| team.team_type == "CARDS A"}.first
     if(fis_green_a_team.present?)
@@ -498,11 +503,25 @@ class DistributionsController < ApplicationController
    
 
     # Step 23
-    selected_patients = patients.select do |p|
-      p.patient_type == 'Type I' && !p.team.present?
-    end
-    selected_patients.each do |p|
-      p.patient_type = 'Type H'
+    # Handle Type I Patient
+    if(pass_step_22)
+      selected_patients = patients.select do |p|
+        p.patient_type == 'Type I' && !p.team.present?
+      end
+      selected_patients.each do |p|
+        p.patient_type = 'Type H'
+      end
+    else
+      selected_patients = patients.select do |p|
+        p.patient_type == 'Type I' && !p.team.present?
+      end
+      selected_patients.each do |patient|
+        all_teams.each do |team|
+          if(team.add_patient(patient))
+            break
+          end
+        end
+      end
     end
     
     # Step 24
@@ -536,7 +555,7 @@ class DistributionsController < ApplicationController
         end
         selected_patients.each do |p|
           if(long_call_team_received < 2 && long_call_team.census < 16)
-            if(long_call_team.add_patient(p))
+            if(long_call_team.add_patient_ignore_cap(p))
               long_call_team_received += 1
             end
           end
