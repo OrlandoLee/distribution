@@ -14,11 +14,13 @@
 </style>
 
 
-<h1>All Teams and Patients</h1>
+<h1>All assignments</h1>
 <table>
   <thead>
     <tr>
       <th>Team</th>
+      <th>Census(after assignment)</th>
+      <th>Capacity</th>
       <th>Patients</th>
     </tr>
   </thead>
@@ -26,6 +28,8 @@
     <% @all_teams.each do |team| %>
       <tr>
         <td><%= team.team_type %></td>
+        <td><%= team.census %></td>
+        <td><%= team.capacity %></td>
         <% team.patients.each do |patient| %>
           <td><%= patient.name %> - <%= patient.patient_type %></td>
         <% end %>
@@ -34,12 +38,13 @@
   </tbody>
 </table>
 
-<h1>All Patients</h1>
+<h1>All Patients Types (after assignment)</h1>
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Patient Type</th>
+      <th>Team</th>
     </tr>
   </thead>
   <tbody>
@@ -47,6 +52,7 @@
       <tr>
         <td><%= patient.name %></td>
         <td><%= patient.patient_type %></td>
+        <td><%= patient.team.try(:team_type) %></td>
       </tr>
     <% end %>
   </tbody>
