@@ -3,9 +3,10 @@ class Team
   ATTENDING_TEAM_TYPE = ['FIS Green C', 'FIS Green A', 'FIS Red A', 'FIS Blue A', 'FIS Purple A']
   CALL_ASSIGNMENT = ["TINY CALL", "SHORT CALL", "LONG CALL", "PRE CALL", "POST CALL"]
 
-  attr_accessor :team_type, :name, :description, :census, :capacity, :call_assignment, :patients
+  attr_accessor :id, :team_type, :name, :description, :census, :capacity, :call_assignment, :patients
 
-  def initialize(team_type:, name: nil, description: nil, census:, capacity:, call_assignment: nil)
+  def initialize(id: nil, team_type:, name: nil, description: nil, census:, capacity:, call_assignment: nil)
+    @id = id
     @team_type = team_type
     @name = name
     @description = description

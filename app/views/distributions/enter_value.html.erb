@@ -1,0 +1,58 @@
+  <script type="text/javascript">
+    $(document).on('click', '#add-patient', function() {
+      var row = $('#patient-rows .patient-row').last().clone();
+      row.find(':input').val('');
+      row.insertAfter('#patient-rows .patient-row:last');
+      return false;
+    });
+  </script>
+
+
+  <style>
+    .patient-row {
+      margin-bottom: 10px;
+    }
+  </style>
+
+
+<%= form_for :all_teams, url: '/distribute', method: 'get', id: 'teams-form' do |f_teams| %>
+  <% @all_teams.each do |team| %>
+    <%= f_teams.fields_for 'teams[]', team do |f_team| %>
+      <strong><%= team.team_type %></strong>
+      <%= f_team.hidden_field :team_type %>
+      <div>
+        <%= f_team.label :census %>
+        <%= f_team.number_field :census, placeholder: 'Enter census' %>
+      </div>
+      <div>
+        <%= f_team.label :capacity %>
+        <%= f_team.number_field :capacity, placeholder: 'Enter capacity' %>
+      </div>
+      <div>
+        <%= f_team.label :call_assignment %>
+        <%= f_team.select :call_assignment, Team::CALL_ASSIGNMENT, prompt: 'Select call assignment' %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% @all_patients.each do |patient| %>
+    <%= f_teams.fields_for 'patients[]', patient do |f_patient| %>
+      <strong><%= "Patient #{patient.id}" %></strong>
+      <div>
+        <%= f_patient.label :name %>
+        <%= f_patient.text_field :name, placeholder: 'Enter name (required)' %>
+      </div>
+      <div>
+        <%= f_patient.label :original_team %>
+        <%= f_patient.select :original_team, Team::RESIDENT_TEAM_TYPE + Team::ATTENDING_TEAM_TYPE, prompt: 'Select original team' %>
+      </div>
+      <div>
+        <%= f_patient.label :patient_type %>
+        <%= f_patient.select :patient_type, Patient::PATIENT_TYPE, prompt: 'Select a patient type (required)' %>
+      </div>
+    <% end %>
+  <% end %>
+
+
+  <%= f_teams.submit 'Submit All Forms', id: 'teams-submit' %>
+<% end %>

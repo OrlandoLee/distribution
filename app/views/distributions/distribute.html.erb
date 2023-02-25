@@ -25,9 +25,9 @@
   <tbody>
     <% @all_teams.each do |team| %>
       <tr>
+        <td><%= team.team_type %></td>
         <% team.patients.each do |patient| %>
-          <td><%= team.team_type %></td>
-          <td><%= patient.name %> - <%= patient.patient_type %>        </td>
+          <td><%= patient.name %> - <%= patient.patient_type %></td>
         <% end %>
       </tr>
     <% end %>

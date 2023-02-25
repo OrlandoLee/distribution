@@ -1,13 +1,30 @@
 class DistributionsController < ApplicationController
-  def index
+  def enter_value
+    @all_teams = []
+    [Team::RESIDENT_TEAM_TYPE + Team::ATTENDING_TEAM_TYPE].flatten.each_with_index do |team_type, index|
+      @all_teams << Team.new(id: index, team_type: team_type, census: 10, capacity: 15)
+    end
+
+    @all_patients = []
+    (params[:number_of_patients] || 10).to_i.times do |i|
+      @all_patients << Patient.new(id: i)
+    end
+  end
+
+  def distribute
     @cardiology_admission = 10
-    @all_patients = [
-      Patient.new(patient_type: "BR", name: 'patient 1', original_team: 'FIS Green C')
-    ]
-    @all_teams = [
-      Team.new(team_type: 'RIS 1 A', census: 10, capacity: 15, call_assignment: "LONG CALL"),
-      Team.new(team_type: 'FIS Green C', census: 10, capacity: 15)
-    ]
+    @all_teams = []
+    @all_patients = []
+    params.permit![:all_teams][:teams].each do |id, team|
+      @all_teams << Team.new(team_type: team[:team_type], census: team[:census].to_i, capacity: team[:capacity].to_i, call_assignment: team[:call_assignment])
+    end
+
+    params.permit![:all_teams][:patients].each do |id, patient|
+      if(patient[:name].present?)
+        @all_patients << Patient.new(patient_type: patient[:patient_type], name: patient[:name], original_team: patient[:original_team])
+      end
+    end
+
     assign_bouncebacks(patients: @all_patients, teams: @all_teams)
     assign_patients(patients: @all_patients, all_teams: @all_teams)
   end
