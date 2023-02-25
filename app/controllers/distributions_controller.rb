@@ -1,13 +1,29 @@
 class DistributionsController < ApplicationController
   def enter_value
     @all_teams = []
-    [Team::RESIDENT_TEAM_TYPE + Team::ATTENDING_TEAM_TYPE].flatten.each_with_index do |team_type, index|
-      @all_teams << Team.new(id: index, team_type: team_type, census: 10, capacity: 15)
+    [Team::ATTENDING_TEAM_TYPE + Team::RESIDENT_TEAM_TYPE].flatten.each_with_index do |team_type, index|
+      capacity = nil
+      if(team_type == 'FIS Green C')
+        capacity = 1000
+      end
+      if(team_type == 'FIS Green A')
+        capacity = 6
+      end
+      if(team_type == 'FIS Red A')
+        capacity = 12
+      end
+      if(team_type == 'FIS Blue A')
+        capacity = 12
+      end
+      if(team_type == 'FIS Purple A')
+        capacity = 10
+      end
+      @all_teams << Team.new(id: index, team_type: team_type, census: nil, capacity: capacity)
     end
 
     @all_patients = []
     (params[:number_of_patients] || 10).to_i.times do |i|
-      @all_patients << Patient.new(id: i)
+      @all_patients << Patient.new(id: i+1)
     end
   end
 
