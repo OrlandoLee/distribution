@@ -1,24 +1,53 @@
-<h1>All Teams</h1>
-<ul>
-  <% @all_teams.each do |team| %>
-    <li>
-      <%= team.team_type %>
-    </li>
-    <% team.patients.each do |patient| %>
-      <li>
-        <%= patient.name %> - <%= patient.patient_type %>
-      </li>
-    <% end %>
-  <% end %>
-</ul>
+<style>
+  table {
+    border-collapse: collapse;
+  }
 
+  th, td {
+    padding: 8px;
+    border: 1px solid black;
+  }
+
+  th {
+    background-color: #ddd;
+  }
+</style>
+
+
+<h1>All Teams and Patients</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Team</th>
+      <th>Patients</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @all_teams.each do |team| %>
+      <tr>
+        <% team.patients.each do |patient| %>
+          <td><%= team.team_type %></td>
+          <td><%= patient.name %> - <%= patient.patient_type %>        </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <h1>All Patients</h1>
-<ul>
-  <% @all_patients.each do |patient| %>
-    <li>
-      <%= patient.name %> - <%= patient.patient_type %>
-    </li>
-  <% end %>
-</ul>
-
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Patient Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @all_patients.each do |patient| %>
+      <tr>
+        <td><%= patient.name %></td>
+        <td><%= patient.patient_type %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
