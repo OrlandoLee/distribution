@@ -85,7 +85,7 @@
             </div>
             <div>
             <%= f_patient.label :original_team %>
-            <%= f_patient.select :original_team, Team::RESIDENT_TEAM_TYPE + Team::ATTENDING_TEAM_TYPE, prompt: 'Select original team (optional)' %>
+            <%= f_patient.select :original_team, Team.team_type_value_label_hash, prompt: 'Select original team (optional)' %>
           </div>
             <br></br>
           <% end %>
